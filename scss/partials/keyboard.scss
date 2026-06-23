@@ -1,0 +1,31 @@
+@use "../mixins/mixins";
+
+.keyboard {
+  @include mixins.dimension(100vw, 100%);
+
+  @include mixins.flexbox();
+
+  @include mixins.wrap();
+
+  gap: 0.5rem;
+
+  &__key {
+    @include mixins.dimension(10%, 20%);
+
+    padding: 1rem 0;
+
+    border: 2px solid #292c36;
+    border-radius: 0.25rem;
+
+    font-weight: bold;
+
+    // &:hover {
+    //   background: oklch(89.7% 0.196 126.665);
+    // }
+
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.3;
+    }
+  }
+}

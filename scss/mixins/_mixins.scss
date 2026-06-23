@@ -1,0 +1,16 @@
+@mixin flexbox($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin wrap($align: center) {
+  flex-wrap: wrap;
+  align-content: $align;
+}
+
+@mixin dimension($width: 100%, $height: 100%) {
+  width: $width;
+  height: $height;
+}

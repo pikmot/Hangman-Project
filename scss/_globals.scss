@@ -1,0 +1,19 @@
+@use "../scss/variables/fonts" as *;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $header;
+  text-align: center;
+}
+
+p {
+  font-family: $text;
+}
+
+// body {
+//   background-color: oklch(84.1% 0.238 128.85);
+// }

@@ -1,0 +1,18 @@
+@use "../mixins/mixins";
+
+.image-container {
+  @include mixins.dimension(100%, 50vh);
+  // width: 100dvw;
+  // height: 35dvh;
+
+  @include mixins.flexbox(row);
+
+  &__card {
+    width: 75%;
+
+    border: 2px solid #292c36;
+    border-radius: 0.25rem;
+
+    padding: 1em;
+  }
+}

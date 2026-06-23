@@ -3,14 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./stylesheet.css" />
-    <script src="./app.js"></script>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./app.js" defer></script>
 
     <title>Hangman</title>
   </head>
   <body>
     <main>
-      <h1>Hangman</h1>
+      <section>
+        <h1 class="header">Hangman</h1>
+        <h2 class="header header__subheading" id="streak"></h2>
+        <h2 class="header header__subheading" id="lives"></h2>
+      </section>
+      <section class="image-container">
+        <img
+          id="image"
+          class="image-container image-container__card"
+          src="./assets/img/h-5.jpg"
+        />
+      </section>
+      <section class="word-container" id="word"></section>
+      <section class="keyboard" id="keyboard"></section>
     </main>
   </body>
 </html>

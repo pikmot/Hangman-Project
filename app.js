@@ -1,209 +1,5 @@
 console.log("script working...");
 
-//words couldn't load
-const words = [
-  "apple",
-  "banana",
-  "orange",
-  "grape",
-  "kiwi",
-  "pear",
-  "peach",
-  "plum",
-  "melon",
-  "lemon",
-  "pineapple",
-  "mango",
-  "papaya",
-  "coconut",
-  "strawberry",
-  "blueberry",
-  "raspberry",
-  "blackberry",
-  "cherry",
-  "apricot",
-  "tomato",
-  "carrot",
-  "potato",
-  "onion",
-  "garlic",
-  "pepper",
-  "lettuce",
-  "broccoli",
-  "spinach",
-  "zucchini",
-  "cucumber",
-  "celery",
-  "cauliflower",
-  "asparagus",
-  "mushroom",
-  "pumpkin",
-  "radish",
-  "beetroot",
-  "turnip",
-  "parsnip",
-  "elephant",
-  "giraffe",
-  "tiger",
-  "lion",
-  "cheetah",
-  "leopard",
-  "zebra",
-  "rhino",
-  "hippo",
-  "buffalo",
-  "kangaroo",
-  "koala",
-  "panda",
-  "sloth",
-  "chimpanzee",
-  "gorilla",
-  "orangutan",
-  "lemur",
-  "meerkat",
-  "otter",
-  "shark",
-  "whale",
-  "dolphin",
-  "seal",
-  "octopus",
-  "jellyfish",
-  "lobster",
-  "crab",
-  "shrimp",
-  "starfish",
-  "eagle",
-  "sparrow",
-  "parrot",
-  "penguin",
-  "ostrich",
-  "flamingo",
-  "peacock",
-  "hummingbird",
-  "owl",
-  "falcon",
-  "house",
-  "apartment",
-  "mansion",
-  "cottage",
-  "bungalow",
-  "castle",
-  "villa",
-  "shack",
-  "chalet",
-  "palace",
-  "bed",
-  "chair",
-  "table",
-  "desk",
-  "sofa",
-  "couch",
-  "cabinet",
-  "wardrobe",
-  "bookshelf",
-  "dresser",
-  "car",
-  "bicycle",
-  "motorcycle",
-  "scooter",
-  "truck",
-  "bus",
-  "train",
-  "airplane",
-  "helicopter",
-  "boat",
-  "submarine",
-  "rocket",
-  "spaceship",
-  "hovercraft",
-  "tram",
-  "trolley",
-  "taxi",
-  "ferry",
-  "yacht",
-  "canoe",
-  "violin",
-  "guitar",
-  "piano",
-  "trumpet",
-  "flute",
-  "drums",
-  "clarinet",
-  "saxophone",
-  "cello",
-  "harp",
-  "concert",
-  "symphony",
-  "melody",
-  "harmony",
-  "rhythm",
-  "tempo",
-  "note",
-  "scale",
-  "chord",
-  "tune",
-  "dog",
-  "cat",
-  "rabbit",
-  "hamster",
-  "goldfish",
-  "parakeet",
-  "ferret",
-  "guinea",
-  "chinchilla",
-  "gerbil",
-  "winter",
-  "spring",
-  "summer",
-  "autumn",
-  "snow",
-  "rain",
-  "hail",
-  "sleet",
-  "fog",
-  "storm",
-  "mountain",
-  "river",
-  "lake",
-  "ocean",
-  "forest",
-  "desert",
-  "valley",
-  "canyon",
-  "island",
-  "waterfall",
-  "kitchen",
-  "bathroom",
-  "bedroom",
-  "livingroom",
-  "garage",
-  "basement",
-  "attic",
-  "hallway",
-  "balcony",
-  "patio",
-  "science",
-  "history",
-  "math",
-  "geography",
-  "chemistry",
-  "biology",
-  "physics",
-  "astronomy",
-  "literature",
-  "philosophy",
-  "football",
-  "basketball",
-  "tennis",
-  "golf",
-  "soccer",
-  "baseball",
-  "hockey",
-  "cricket",
-  "rugby",
-  "volleyball",
-];
-
 //loading letters
 const letters = [
   "A",
@@ -234,6 +30,9 @@ const letters = [
   "Z",
 ];
 
+//words var
+let words = [];
+
 //streak counter
 let streak = 0;
 
@@ -245,15 +44,6 @@ const maxLives = 10;
 
 //image counter
 let imgCounter = 0;
-
-//files
-// const fileJava = require("fs");
-
-// //reading from file
-// const rawData = fileJava.readFileSync("./assets/example-words.json");
-// const data = JSON.parse(rawData);
-
-// console.log(data);
 
 //grabbing word - assinging - splitting
 let pracWord;
@@ -268,6 +58,38 @@ const streakCounter = document.getElementById("streak");
 const livesCounter = document.getElementById("lives");
 let playerStatus = document.getElementById("image");
 const image = document.getElementById("image");
+
+//data
+const init = async () => {
+  // console.log("load data");
+  try {
+    //wait for response
+    let res = await fetch("./assets/example-words.json");
+
+    //data in promise format
+    let data = await res.json();
+
+    //assigning data
+    words = data;
+
+    //dynamcally render streak
+    renderStreak(streak);
+
+    //dynamcally render lives
+    renderLives(lives);
+
+    //randomly pick word
+    pickWord();
+
+    //dynamically create word
+    renderWord();
+
+    //dynamically creating keyboard letters
+    createKeyboard();
+  } catch (err) {
+    console.error("Data didn't load:", err);
+  }
+};
 
 //rendering streak
 const renderStreak = (streak) => {
@@ -390,17 +212,5 @@ const createKeyboard = () => {
   }
 };
 
-//dynamcally render streak
-renderStreak(streak);
-
-//dynamcally render lives
-renderLives(lives);
-
-//randomly pick word
-pickWord();
-
-//dynamically create word
-renderWord();
-
-//dynamically creating keyboard letters
-createKeyboard();
+//load Data
+init();

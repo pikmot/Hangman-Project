@@ -15,3 +15,5 @@
   ```
 
 - I'm gonna assume case insensitive
+
+- Is it conventional to dynamically generate entire page? or fixed features exist in htm vs data read should be dynamic

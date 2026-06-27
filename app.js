@@ -33,6 +33,9 @@ const letters = [
 //words var
 let words = [];
 
+//words used
+let wordsUsed = [];
+
 //streak counter
 let streak = 0;
 
@@ -41,6 +44,12 @@ let lives = 0;
 
 //max lives
 const maxLives = 10;
+
+//end game flag
+let wonGame = 0;
+
+//loss game flag
+let lossGame = 0;
 
 //image counter
 let imgCounter = 0;
@@ -53,6 +62,28 @@ let currentWordList;
 
 //sections
 const keyboard = document.getElementById("keyboard");
+
+const keyDownFun = () => {
+  // console.log(event.key);
+
+  if (!letters.includes(event.key.toUpperCase())) {
+    return;
+  }
+
+  if (
+    document.getElementById(event.key.toUpperCase()).className !==
+    "keyboard keyboard__key keyboard__key--disabled"
+  ) {
+    document.getElementById(event.key.toUpperCase()).className =
+      "keyboard keyboard__key keyboard__key--disabled";
+
+    notifyChange(event.key);
+  }
+};
+
+//add listener for key down
+document.addEventListener("keydown", keyDownFun);
+
 const word = document.getElementById("word");
 const streakCounter = document.getElementById("streak");
 const livesCounter = document.getElementById("lives");
@@ -79,7 +110,7 @@ const init = async () => {
     renderLives(lives);
 
     //randomly pick word
-    pickWord();
+    pickWord(0);
 
     //dynamically create word
     renderWord();
@@ -109,42 +140,97 @@ const disableAll = () => {
     key.className += " keyboard__key--disabled";
   }
 
+  lossGame = 1;
+  console.log("removing");
+  document.removeEventListener("keydown", keyDownFun);
+
   setTimeout(() => {
     alert("YOU LOST!!!, REFRESH TO PLAY AGAIN!!");
   }, 100);
 };
 
-const resetState = () => {
-  //resetting status
-  lives = 0;
-  streak += 1;
+const disableAllWin = () => {
+  for (const key of keyboard.children) {
+    key.className += " keyboard__key--disabled";
+  }
 
-  renderStreak(streak);
-
-  renderLives(lives);
-
-  pickWord();
-
-  renderWord();
-
-  createKeyboard();
+  wonGame = 1;
+  console.log("removing2");
+  document.removeEventListener("keydown", keyDownFun);
 
   setTimeout(() => {
-    alert("YOU WON, Close to continue STREAK!!");
+    alert("YOU'RE A GENIUS!!!, YOU GUESSED EVERYTHING!!!");
   }, 100);
 };
 
-const pickWord = () => {
+const resetState = () => {
+  console.log(wonGame, lossGame);
+  if (wonGame || lossGame) {
+    return;
+  } else {
+    //resetting status
+    lives = 0;
+    streak += 1;
+
+    renderStreak(streak);
+
+    renderLives(lives);
+
+    pickWord(0);
+
+    renderWord();
+
+    console.log("hit");
+
+    // if (wordsUsed.length === words.length) {
+    //   return;
+    // }
+
+    if (!wonGame) {
+      setTimeout(() => {
+        alert("YOU WON, Close to continue STREAK!!");
+      }, 100);
+    }
+
+    createKeyboard();
+  }
+};
+
+const pickWord = (num) => {
+  if (wordsUsed.length === words.length) {
+    console.log("maxed out list");
+    wonGame = 1;
+    disableAllWin();
+    return;
+  }
+
   pracWord = words[Math.floor(Math.random() * words.length)].toLowerCase();
 
   console.log(pracWord);
+
+  if (wordsUsed.includes(pracWord)) {
+    //make sure word isn't used
+    console.log("repeat word");
+    pickWord(1);
+  }
+
+  if (num) {
+    return;
+  }
+
   pracWordList = pracWord.split("");
-  ``;
+
   currentWordList = pracWordList.map(() => "*");
+
+  wordsUsed.push(pracWord);
 };
 
 //fucntion to update/render html
 const renderWord = () => {
+  if (wonGame) {
+    return;
+  }
+
   //clear existing word
   word.replaceChildren();
   for (const char of currentWordList) {
@@ -182,17 +268,28 @@ const notifyChange = (letter) => {
       resetState();
     }
   } else {
-    lives += 1;
-    renderLives(lives);
+    if (lossGame || wonGame) {
+      disableAll();
+    } else {
+      lives += 1;
+      renderLives(lives);
+    }
   }
 
   if (lives == maxLives) {
+    lossGame = 1;
     disableAll();
   }
 };
 
 //create keys
 const createKeyboard = () => {
+  if (wonGame) {
+    return;
+  }
+
+  console.log(keyboard);
+
   keyboard.replaceChildren();
   for (const val of letters) {
     let newDiv = document.createElement("div");
